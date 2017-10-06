@@ -1,0 +1,81 @@
+subscription BuildWithRepo {
+  Build {
+    buildId
+    buildUrl
+    provider
+    name
+    status
+    trigger
+    pullRequestNumber
+    repo {
+      owner
+      name
+      defaultBranch
+      channels {
+        name
+      }
+      org {
+        provider {
+          url
+          apiUrl
+          gitUrl
+        }
+      }
+    }
+    commit {
+      sha
+      statuses {
+        context
+        description
+        targetUrl
+      }
+      tags {
+        name
+        release {
+          name
+        }
+      }
+      author {
+        login
+        person {
+          chatId {
+            screenName
+            userId
+          }
+        }
+      }
+    }
+    push {
+      branch
+    }
+    pullRequest {
+      number
+      name
+      baseBranchName
+      branchName
+      mergeCommit {
+        sha
+        statuses {
+          context
+          description
+          targetUrl
+        }
+        tags {
+          name
+          release {
+            name
+          }
+        }
+        author {
+          login
+          person {
+            chatId {
+              screenName
+              userId
+            }
+          }
+        }
+      }
+    }
+  }
+}
