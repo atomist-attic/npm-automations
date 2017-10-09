@@ -4,7 +4,7 @@
 set -o pipefail
 
 declare Pkg=travis-build-node
-declare Version=0.4.1
+declare Version=0.5.0
 
 # write message to standard out (stdout)
 # usage: msg MESSAGE
@@ -99,10 +99,10 @@ function npm-publish-timestamp () {
         prerelease=$safe_branch.
     fi
 
-    local pkg_version
-    pkg_version=$(jq -e --raw-output .version package.json)
+    local pkg_version pkg_json=package.json
+    pkg_version=$(jq -e --raw-output .version "$pkg_json")
     if [[ $? -ne 0 || ! $pkg_version ]]; then
-        err "failed to parse version from package.json"
+        err "failed to parse version from $pkg_json"
         return 1
     fi
     local timestamp
@@ -124,6 +124,30 @@ function npm-publish-timestamp () {
     fi
 
     if ! git-tag "$project_version+travis.$TRAVIS_BUILD_NUMBER"; then
+        return 1
+    fi
+
+    local sha
+    sha=$(git rev-parse HEAD)
+    if [[ $? -ne 0 || ! $sha ]]; then
+        err "failed to get HEAD reference"
+        return 1
+    fi
+    local module_name
+    module_name=$(jq -er .name "$pkg_json")
+    if [[ $? -ne 0 || ! $module_name ]]; then
+        err "failed to parse module name from $pkg_json"
+        return 1
+    fi
+    local url=https://atomist.jfrog.io/atomist/npm-dev/$module_name/-/$module_name-$project_version.tgz
+    local data
+    printf -v data '{"state":"success","target_url":"%s","description":"Prerelease NPM module publication","context":"npm/module-bash/prerelease"}' "$url"
+    if ! curl -s -H 'Accept: application/vnd.github.v3+json' \
+            -H 'Content-Type: application/json' \
+            -H "Authorization: token $GITHUB_TOKEN" \
+            -X POST -d "$data" "https://api.github.com/repos/$TRAVIS_REPO_SLUG/statuses/$sha"
+    then
+        err "failed to post status on commit: $sha"
         return 1
     fi
 }
