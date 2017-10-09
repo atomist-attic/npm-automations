@@ -87,7 +87,9 @@ export function postStatusToGitHub(
     if (e && e.data && e.data.Build) {
         const axiosConfig = {
             headers: {
-                Authorization: `token ${token}`,
+                "Accept": "application/vnd.github.v3+json",
+                "Authorization": `token ${token}`,
+                "Content-Type": "application/json",
             },
         };
 
