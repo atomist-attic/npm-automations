@@ -12,6 +12,7 @@ const token = process.env.GITHUB_TOKEN;
 export const configuration: Configuration = {
     name: pj.name,
     version: pj.version,
+    // teamIds: ["T095SFFBK", "T29E48P34"],
     teamIds: ["T1L0VDKJP"],
     commands: [
     ],

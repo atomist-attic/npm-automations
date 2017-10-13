@@ -143,7 +143,7 @@ function npm-publish-timestamp () {
     local module_url=https://atomist.jfrog.io/atomist/npm-dev/$module_name/-/$module_name-$project_version.tgz
     local status_url=https://api.github.com/repos/$TRAVIS_REPO_SLUG/statuses/$sha
     local post_data
-    printf -v post_data '{"state":"success","target_url":"%s","description":"Pre-release NPM module publication","context":"npm/module-bash/prerelease"}' "$module_url"
+    printf -v post_data '{"state":"success","target_url":"%s","description":"Pre-release NPM module publication","context":"npm/atomist/prerelease"}' "$module_url"
     if ! curl -s -H 'Accept: application/vnd.github.v3+json' \
             -H 'Content-Type: application/json' \
             -H "Authorization: token $GITHUB_TOKEN" \
