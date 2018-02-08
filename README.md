@@ -1,6 +1,6 @@
-# @atomist/npm-automations
+# DEPRECATED @atomist/npm-automations
 
-[![Build Status](https://travis-ci.org/atomist/npm-automations.svg?branch=master)](https://travis-ci.org/atomist/npm-automations)
+Deprecated, see https://github.com/atomist/node-automations
 
 [Atomist][atomist] automations for interactive with NPM modules using
 the [`@atomist/automation-client`][client] node module to implement a
